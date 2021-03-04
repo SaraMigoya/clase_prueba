@@ -144,8 +144,8 @@ const dataReceived = (req, res, next) => {
 }
 
 const productosCreados = (req, res, next) => {
-    const { name, description, price } = req.body;
-    if (!name || !description || !price) {
+    const { name, description, price, stock } = req.body;
+    if (!name || !description || !price || ! stock) {
         return res.status(400).json({
             error: 'faltan campos. por favor completar'
         })

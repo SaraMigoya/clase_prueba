@@ -19,7 +19,7 @@ app.use("/users", usersController);
 app.use("/products", productsController);
 app.use("/orders", ordersController);
 app.use("/initialProducts", initialController);
-app.use("/usersInitials", initialController);
+app.use("/init", initialController);
 
 
 db.init()

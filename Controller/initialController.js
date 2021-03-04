@@ -6,6 +6,8 @@ const models = require("../models");
 
 
 router.post("/initialProducts", async (req, res) => {
+
+
     const newProduct = [
 
         {
@@ -53,64 +55,73 @@ router.post("/initialProducts", async (req, res) => {
         models.productos.create(e)
     });
 
+
     res.status(200).json({ message: "¡Producto creado con éxito!" })
-
-    const nuevosEstados = [
-        {
-            id: 1,
-            estado: "Iniciado"
-        },
-        {
-            id: 2,
-            estado: "En preparacion"
-        },
-        {
-            id: 3,
-            estado: "Enviando"
-        },
-        {
-            id: 4,
-            estado: "Entregado"
-        },
-        {
-            id: 5,
-            estado: "Finalizado exitosamente"
-        },
-        {
-            id: 6,
-            estado: "Finalizado por cancelacion"
-        }
-    ]
-
-    nuevosEstados.forEach(e => {
-        models.estados.create(e)
-    });
-
 })
 
-.post("/usersInitials", (req,res) => {
-    const newUser = [
-        {
-            username: "SaraMi",
-            full_name: "Sara Migoya",
-            email: "sara@gmail.com",
-            phone: 221334422,
-            adress: "Libertador 455",
-            password: "SaraM123/",
-            isAdmin: "true"
-        },
-        {
-            username: "Evaluador",
-            full_name: "Evaluador",
-            email: "evaluador@gmail.com",
-            phone: 221334422,
-            adress: "Libertador 455",
-            password: "Evaluador123/",
-            isAdmin: "false"
-        }
+    .post("/initialStatus", async (req,res) => {
+        const nuevosEstados = [
+            {
+                id: 1,
+                estado: "Iniciado"
+            },
+            {
+                id: 2,
+                estado: "En preparacion"
+            },
+            {
+                id: 3,
+                estado: "Enviando"
+            },
+            {
+                id: 4,
+                estado: "Entregado"
+            },
+            {
+                id: 5,
+                estado: "Finalizado exitosamente"
+            },
+            {
+                id: 6,
+                estado: "Finalizado por cancelacion"
+            }
+        ]
     
-    ]
-})
+        nuevosEstados.forEach(el => {
+            models.estados.create(el)
+        }); 
+        res.status(200).json({message: "Estado creado con éxito"})
+    })
+
+    .post("/initialUsers", async (req,res) => {
+        const newsUsers = [
+            {
+                username: "SaraMi",
+                full_name: "Sara Migoya",
+                email: "sara@gmail.com",
+                phone: 221334422,
+                adress: "Libertador 455",
+                password: "SaraM123/",
+                isAdmin: "true"
+            },
+            {
+                username: "Evaluador",
+                full_name: "Evaluador",
+                email: "evaluador@gmail.com",
+                phone: 221334422,
+                adress: "Libertador 455",
+                password: "Evaluador123/",
+                isAdmin: "false"
+            }
+        
+        ]
+        newsUsers.forEach(e => {
+            models.usuario.create(e)
+        });
+
+        res.status(200).json({ message: "Usuario creado con éxito!" })
+    
+    })
 
 
 module.exports = router

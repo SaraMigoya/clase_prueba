@@ -102,7 +102,7 @@ router.post("/", validateJwt, async (req, res) => {
         await models.detalle_pedidos.update({ Pedidos2OrderId: pedidoRealizado.order_id }, {
             where: { Pedidos2OrderId: null }
         });
-        if (pedidoRealizado) return res.status(200).json({ message: `¡Tu pedido ya fue registrado!. \n Número de pedido: ${pedidoRealizado.order_id}. \nTotal: $ ${pedidoRealizado.total}. \n Forma de pago: ${pedidoRealizado.payment_method}` });
+        if (pedidoRealizado) return res.status(200).json({ message: `¡Tu pedido ya fue registrado!. Número de pedido: ${pedidoRealizado.order_id}.Total: $ ${pedidoRealizado.total}. Forma de pago: ${pedidoRealizado.payment_method}` });
         res.status(400).json({
             message: "¡Lo sentimos! No se pudo realizar el pedido"
         })
@@ -116,9 +116,6 @@ router.post("/", validateJwt, async (req, res) => {
 
         //trae únicamente los pedidos del us logueado
         if (req.user.admin == false) {
-            /*    res.send("Sólo un administrador puede acceder a todos los pedidos.")
-               return  */
-
             const username = await models.usuario.findOne({
                 where: { username: req.user.nombreUser }
             })
@@ -174,44 +171,18 @@ router.post("/", validateJwt, async (req, res) => {
     })
 
 
+    .get("/:id", validateJwt, async (req, res) => {
 
-    /* 
-         .get("/:id", validateJwt, async (req, res) => {
-    
-            const username = await models.usuario.findOne({
-                where: { username: req.user.nombreUser }
-            })
-    
-            const order2 = await models.pedidos.findOne({
-                where: { user_id: username.id },
-    
-            })
-    
-            const detail_orders = await models.detalle_pedidos.findOne({
-                where: { Pedidos2OrderId: order2.order_id }
-            })
-    
-            if (req.params.id == username.id) {
-    
-                const order = await models.pedidos.findAll({
-                    where: { user_id: username.id },
-                    include:
-                    {
-                        all: true,
-                        models: detail_orders,
-                        attributes: ["id_detail", "product_name", "product_cantidad"] 
-                    },
-                })
-    
-                res.status(200).json(order)
-            }
-    
-            else {
-                res.send("Sólo puedes acceder a tus pedidos realizados")
-            }
-    
-    
-        })  */
+        if (req.user.admin == false) {
+            res.send("Sólo un administrador puede acceder a esta información.")
+            return
+        }
+        const order = await models.pedidos.findOne({
+            where: { order_id: req.params.id }
+        })
+        res.status(200).json(order)
+    })
+
 
     .put("/:id", validateJwt, async (req, res) => {
 
@@ -242,22 +213,20 @@ router.post("/", validateJwt, async (req, res) => {
                 const pedidoActualizado = await models.pedidos.findOne({
                     where: { order_id: req.params.id }
                 })
-           
+
 
                 const estadoNuevo = await models.estados.findOne({
                     where: { id: pedidoActualizado.EstadoId }
-                }) 
-            
+                })
+
 
                 if (estadoNuevo) return res.status(200).json({
-                    message: `Estado actualizado con exito.
-            El estado del pedido ${req.params.id} paso de "${estadoAnterior.estado}" a "${estadoNuevo.estado}" `
-            
+                    message: `Actualizado con exito. El estado del pedido ${req.params.id} paso de "${estadoAnterior.estado}" a "${estadoNuevo.estado}" `
+
                 })
             } else {
                 return res.status(400).json({
-                    message: `Error al actualizar estado.
-            MOTIVO: El pedido ${req.params.id} no existe`
+                    message: `Error al actualizar estado.MOTIVO: El pedido ${req.params.id} no existe`
                 })
             }
 
@@ -277,7 +246,7 @@ router.post("/", validateJwt, async (req, res) => {
 
 
             if (estadoAnterior.id == 5 || estadoAnterior.id == 6) {
-                return res.status(201).json({ message: "El estado de su pedido ya esta finalizado." })
+                return res.status(201).json({ message: "Su pedido ya fue finalizado." })
             }
 
             await models.pedidos.update({ "EstadoId": (pedido.EstadoId + 1) }, {
@@ -287,16 +256,15 @@ router.post("/", validateJwt, async (req, res) => {
             const pedidoActualizado = await models.pedidos.findOne({
                 where: { order_id: req.params.id }
             })
-            
+
             const estadoNuevo = await models.estados.findOne({
                 where: { id: pedidoActualizado.EstadoId }
-            }) 
-            
-            
+            })
+
+
 
             if (estadoNuevo) return res.status(200).json({
-                message: `Estado actualizado con exito.
-                El estado del pedido ${req.params.id} paso de "${estadoAnterior.dataValues.estado}" a "${estadoNuevo.dataValues.estado}" `
+                message: `Estado actualizado con exito. El estado del pedido ${req.params.id} paso de "${estadoAnterior.dataValues.estado}" a "${estadoNuevo.dataValues.estado}" `
             })
             console.log(estadoNuevo)
             console.log(estadoAnterior)
@@ -304,16 +272,28 @@ router.post("/", validateJwt, async (req, res) => {
 
         } else {
             return res.status(400).json({
-                message: `Error al actualizar estado.
-                MOTIVO: El pedido ${req.params.id} no existe`
+                message: `Error al actualizar estado. MOTIVO: El pedido ${req.params.id} no existe`
             })
         }
 
-
-
     })
 
+    .delete("/:id", validateJwt, async (req, res) => {
 
+
+        if (req.user.admin == false) {
+            res.send("Sólo un administrador puede modificar y/o eliminar un pedido.")
+            return
+        }
+        const deleteOrder = await models.pedidos.destroy({
+            where: { order_id: req.params.id }
+
+        })
+        if (deleteOrder) return res.status(200).json({ messege: `${req.body.name} fue eliminado con exito` })
+        return res.status(400).json({
+            message: `No se encontro producto con el ID: ${req.params.id}`
+        })
+    })
 
 
 

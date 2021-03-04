@@ -10,11 +10,12 @@ router.post("/", productosCreados, validateJwt, async (req, res) => {
         return
     }
 
-    const { name, description, price } = req.body;
+    const { name, description, price , stock} = req.body;
     const newProduct = {
         name,
         description,
-        price
+        price,
+        stock
     }
 
     const product = await models.productos.create(newProduct)
@@ -26,7 +27,6 @@ router.post("/", productosCreados, validateJwt, async (req, res) => {
     })
 
 })
-
 
    
     .get("/", async (req, res) => {
@@ -69,7 +69,7 @@ router.post("/", productosCreados, validateJwt, async (req, res) => {
         const deleteProduct = await models.productos.destroy({
             where: { id: req.params.id }
         })
-        if (deleteProduct) return res.status(200).json({ messege: `${req.body.name} fue eliminado con exito` })
+        if (deleteProduct) return res.status(200).json({ messege: `El producto fue eliminado con exito` })
         return res.status(400).json({
             message: `No se encontro el producto con el ID: ${req.params.id}`
         })
