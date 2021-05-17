@@ -61,7 +61,7 @@ function validateClave(password) {
         var mayuscula = false;
         var minuscula = false;
         var numero = false;
-        var caracter_raro = false;
+        var symbol = false;
 
         for (var i = 0; i < password.length; i++) {
             if (password.charCodeAt(i) >= 65 && password.charCodeAt(i) <= 90) {
@@ -74,10 +74,10 @@ function validateClave(password) {
                 numero = true;
             }
             else {
-                caracter_raro = true;
+                symbol = true;
             }
         }
-        if (mayuscula == true && minuscula == true && caracter_raro == true && numero == true) {
+        if (mayuscula == true && minuscula == true && symbol == true && numero == true) {
             return true;
         }
     }

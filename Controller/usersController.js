@@ -5,6 +5,7 @@ const { dataReceived, dataLogin, validateJwt } = require("../middlewares");
 
 
 router.post("/", dataReceived, async (req, res) => {
+    
     const { username, full_name, email, phone, adress, password, isAdmin } = req.body
     const newUser = {
         username,
@@ -16,14 +17,12 @@ router.post("/", dataReceived, async (req, res) => {
         isAdmin
     }
 
-
     const usu = await models.usuario.create(newUser)
     if (usu) return res.status(200).json(usu);
 
     res.status(400).json({
         message: "No se pudo crear el usuario"
     })
-
 
 })
 
