@@ -66,12 +66,14 @@ router.post("/", productosCreados, validateJwt, async (req, res) => {
             res.send("Sólo un administrador puede realizar altas y/o modificar productos")
             return
         }
+
         const deleteProduct = await models.productos.destroy({
             where: { id: req.params.id }
         })
+
         if (deleteProduct) return res.status(200).json({ messege: `El producto fue eliminado con exito` })
         return res.status(400).json({
-            message: `No se encontro el producto con el ID: ${req.params.id}`
+            message: `no se pudo eliminar la ciudad ${req.params.id}`
         })
     })
 

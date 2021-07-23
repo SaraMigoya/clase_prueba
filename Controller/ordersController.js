@@ -153,12 +153,12 @@ router.post("/", validateJwt, async (req, res) => {
             const allOrders = await models.pedidos.findAll({
                 include: [
                     {
-                        all: true,
+                   
                         model: models.detalle_pedidos,
                         attributes: ["id_detail", "product_name", "product_cantidad"]
                     },
                     {
-                        all: true,
+                       
                         model: models.estados,
                     }
 
