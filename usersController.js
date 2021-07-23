@@ -1,7 +1,7 @@
 const express = require("express");
-const models = require("../models")
+const models = require("./models")
 const router = express.Router();
-const { dataReceived, dataLogin, validateJwt } = require("../middlewares");
+const { dataReceived, dataLogin, validateJwt } = require("./middlewares");
 
 
 router.post("/", dataReceived, async (req, res) => {
@@ -34,7 +34,7 @@ router.post("/", dataReceived, async (req, res) => {
 
         }
 
-        console.log(req.user.admin)
+
         const usuarios = await models.usuario.findAll();
         if (usuarios.length > 0) return res.status(200).json(usuarios);
         res.status(400).json({

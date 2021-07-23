@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const app = express();
-const models = require("../models");
-const { validateJwt } = require("../middlewares");
+const models = require("./models");
+const { validateJwt } = require("./middlewares");
 
 
 

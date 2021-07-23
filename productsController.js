@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const models = require("../models");
-const { productosCreados, validateJwt } = require("../middlewares");
+const models = require("./models");
+const { productosCreados, validateJwt } = require("./middlewares");
 
 router.post("/", productosCreados, validateJwt, async (req, res) => {
 
